@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ProductCard } from "@/components/product-card";
 
@@ -11,12 +10,15 @@ import {
   searchProducts,
   getSellersByPincode,
 } from "@/lib/data";
-
+import { useEffect } from "react";
+ 
 export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [pincode, setPincode] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("popular");
+  const [products, setProducts] = useState([]);
+
 
   const categories = useMemo(() => getCategories(), []);
 
@@ -24,6 +26,12 @@ export default function ProductsPage() {
     let products = searchQuery
       ? searchProducts(searchQuery)
       : getAllProducts();
+    
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data));
+  }, []);
 
     // Category filter
     if (selectedCategory) {
@@ -59,8 +67,6 @@ export default function ProductsPage() {
 
   return (
     <div>
-  
-
       <main style={{ padding: "20px" }}>
         <h1>All Products</h1>
 

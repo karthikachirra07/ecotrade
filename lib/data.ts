@@ -1,27 +1,13 @@
-import { Product } from "./types";
-
-/* =========================
-   🧑‍🌾 SELLERS DATA
-========================= */
-
-export const sellers = [
-  {
-    id: 1,
-    name: "Farmer John",
-    city: "Hyderabad",
-    pincode: "500001",
-  },
-  {
-    id: 2,
-    name: "Green Store",
-    city: "Secunderabad",
-    pincode: "500002",
-  },
-];
-
 /* =========================
    📦 PRODUCTS DATA
 ========================= */
+import { Product, Seller } from "./types";
+
+export const sellers: Seller[] = [
+  { id: 1, name: "Farmer John", city: "Hyderabad", pincode: "500001" },
+  { id: 2, name: "Green Store", city: "Secunderabad", pincode: "500002" },
+];
+
 
 export const products: Product[] = [
   {

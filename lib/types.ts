@@ -4,30 +4,22 @@ export type Product = {
   id: number;
   name: string;
   description: string;
-
-  // Category & classification
   category: string;
-  ecoScore: number; // 1–10 (eco friendliness)
-
-  // Pricing & quantity
+  ecoScore: number;
   price: number;
-  unit: string; // "kg", "piece", etc.
+  unit: string;
   quantity: number;
-
-  // Seller info
   sellerId: number;
-
-  // Availability
   inStock: boolean;
-
-  // Ratings & popularity
-  rating: number; // 0–5
+  rating: number;
   reviews: number;
+};
 
-  // Optional extras
-  image?: string;
-  tags?: string[];
-  createdAt?: string;
+export type Seller = {
+  id: number;
+  name: string;
+  city: string;
+  pincode: string;
 };
 
 export interface User {

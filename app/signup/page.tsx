@@ -1,32 +1,48 @@
 "use client";
 import { useState } from "react";
-import Navbar from "../../components/navbar";
 
-export default function SignupPage() {
+export default function Signup() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignup = async (e: any) => {
-    e.preventDefault();
-
-    const res = await fetch("/api/auth/signup", {
+  const handleSignup = async () => {
+    await fetch("/api/users", {
       method: "POST",
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+      }),
     });
 
-    const data = await res.json();
-    alert(data.message);
+    alert("Signup successful");
   };
 
   return (
     <div>
-      <Navbar />
-      <form onSubmit={handleSignup} style={{ textAlign: "center" }}>
-        <h2>Signup</h2>
-        <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" /><br /><br />
-        <input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" /><br /><br />
-        <button type="submit">Signup</button>
-      </form>
+      <h2>Signup</h2>
+
+      <input
+        placeholder="Name"
+        onChange={(e) => setName(e.target.value)}
+      />
+      <br />
+
+      <input
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <br />
+
+      <input
+        type="password"
+        placeholder="Password"
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <br />
+
+      <button onClick={handleSignup}>Signup</button>
     </div>
   );
 }

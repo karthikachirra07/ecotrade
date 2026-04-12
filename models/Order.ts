@@ -1,0 +1,11 @@
+import mongoose from "mongoose";
+
+const OrderSchema = new mongoose.Schema({
+  userId: String,
+  products: Array,
+  total: Number,
+  status: { type: String, default: "pending" },
+});
+
+export default mongoose.models.Order ||
+  mongoose.model("Order", OrderSchema);

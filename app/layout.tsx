@@ -8,18 +8,20 @@ const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { CartProvider } from "@/lib/cart-context";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+
+export default function RootLayout({ children }: any) {
   return (
     <html>
       <body>
         <Header />
         {children}
-        <Footer />
       </body>
     </html>
   );
 }
+
 
 export const metadata: Metadata = {
   title: "EcoTrade - Farm to Consumer Marketplace",
