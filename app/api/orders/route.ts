@@ -4,8 +4,10 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   await connectDB();
-  const data = await req.json();
 
-  const order = await Order.create(data);
+  const body = await req.json();
+
+  const order = await Order.create(body);
+
   return NextResponse.json(order);
 }

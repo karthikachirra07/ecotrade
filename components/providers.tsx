@@ -1,10 +1,10 @@
 "use client";
 
+import { CartProvider } from "@/hooks/useCart";
 import { AuthProvider } from "@/lib/auth-context";
-import { CartProvider } from "@/lib/cart-context";
 import { OrdersProvider } from "@/lib/orders-context";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children }: any) {
   return (
     <AuthProvider>
       <CartProvider>

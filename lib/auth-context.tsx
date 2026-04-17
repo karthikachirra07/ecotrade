@@ -8,7 +8,8 @@ import {
   type ReactNode,
 } from "react";
 import { User, UserRole } from "./types";
-import { mockSellers } from "./data";
+import { sellers } from "./data";
+
 
 interface AuthContextType {
   user: User | null;
@@ -47,8 +48,8 @@ function initializeUsers(): User[] {
   }
   
   // Initialize with mock sellers
-  localStorage.setItem(USERS_KEY, JSON.stringify(mockSellers));
-  return mockSellers;
+  localStorage.setItem(USERS_KEY, JSON.stringify(sellers));
+  return sellers as unknown as User[];
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -77,37 +78,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: true };
     }
 
-    return { success: false, error: "Invalid email or password" };
-  };
+  return { success: false, error: "Invalid email or password" };
+};
 
-  const register = async (userData: RegisterData): Promise<{ success: boolean; error?: string }> => {
+const register = async (userData: RegisterData): Promise<{ success: boolean; error?: string }> => {
     const users: User[] = JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
     
     // Check if email already exists
     if (users.some((u) => u.email.toLowerCase() === userData.email.toLowerCase())) {
       return { success: false, error: "Email already registered" };
     }
-
     const newUser: User = {
-      id: `user-${Date.now()}`,
-      email: userData.email,
-      password: userData.password,
-      name: userData.name,
-      role: userData.role,
-      pincode: userData.pincode,
-      city: userData.city,
-      createdAt: new Date().toISOString(),
-      ...(userData.role === "seller" && {
-        farmName: userData.farmName,
-        farmDescription: userData.farmDescription,
-        organicCertified: false,
-        practicesDescription: "",
-      }),
-      ...(userData.role === "consumer" && {
-        address: userData.address,
-      }),
-    };
+  id: `user-${Date.now()}`,
+  email: userData.email,
+  password: userData.password,
+  name: userData.name,
+  role: userData.role,
+  pincode: userData.pincode,
+  city: userData.city,
+  createdAt: new Date().toISOString(),
+  ...(userData.role === "seller" && {
+    farmName: userData.farmName,
+    farmDescription: userData.farmDescription,
+    status: "pending"
+  }),
+  ...(userData.role === "consumer" && {
+    address: userData.address,
+    status: "approved"
+  }),
+};
 
+   
     users.push(newUser);
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
     setUser(newUser);

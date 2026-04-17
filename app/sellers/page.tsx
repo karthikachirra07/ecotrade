@@ -1,66 +1,84 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Footer } from "@/components/footer";
+import { useMemo, useState } from "react";
 import { SellerCard } from "@/components/seller-card";
 import { sellers, getSellersByPincode } from "@/lib/data";
+import { useAuth } from "@/lib/auth-context";
+import { Search, MapPin } from "lucide-react";
 
 export default function SellersPage() {
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
-  const [pincode, setPincode] = useState("");
+  const [filterPincode, setFilterPincode] = useState("");
 
   const filteredSellers = useMemo(() => {
-    let result = pincode ? getSellersByPincode(pincode) : [...sellers];
+    let result = filterPincode ? getSellersByPincode(filterPincode) : [...sellers];
 
-    // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(
-        (sellers:any) =>
-          sellers.name.toLowerCase().includes(query) ||
-          sellers.city.toLowerCase().includes(query)
+        (seller: any) =>
+          seller.name.toLowerCase().includes(query) ||
+          seller.city.toLowerCase().includes(query)
       );
     }
-
     return result;
-  }, [searchQuery, pincode]);
+  }, [searchQuery, filterPincode]);
 
   return (
-    <div>
-      <main style={{ padding: "20px" }}>
-        <h1>All Sellers</h1>
+    <main className="mx-auto max-w-6xl p-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">Local Farmers & Sellers</h1>
+        <p className="mt-2 text-muted-foreground">
+          Buy directly from farmers near you. Fresh, organic, sustainable.
+        </p>
+      </div>
 
-        {/* 🔍 Search */}
-        <div style={{ marginBottom: "20px" }}>
-          <input
-            type="text"
-            placeholder="Search sellers..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ marginRight: "10px" }}
-          />
+      {/* Search & Filter Section */}
+      <div className="mb-8 rounded-3xl border border-border bg-card p-6">
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="relative">
+            <Search className="absolute left-3 top-3.5 h-5 w-5 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search farmers by name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full rounded-lg border border-border bg-background pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-700"
+            />
+          </div>
 
-          <input
-            type="text"
-            placeholder="Enter pincode"
-            value={pincode}
-            onChange={(e) => setPincode(e.target.value)}
-          />
+          <div className="relative">
+            <MapPin className="absolute left-3 top-3.5 h-5 w-5 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Filter by pincode (optional)"
+              value={filterPincode}
+              onChange={(e) => setFilterPincode(e.target.value)}
+              className="w-full rounded-lg border border-border bg-background pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-700"
+            />
+          </div>
         </div>
 
-        {/* 🧑 Sellers */}
-        <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+        {user?.pincode && (
+          <p className="mt-4 text-sm text-muted-foreground">
+            📍 Your location: {user.pincode} • Showing distance to each farmer
+          </p>
+        )}
+      </div>
+
+      {/* Sellers Grid */}
+      {filteredSellers.length === 0 ? (
+        <div className="rounded-3xl border border-border bg-muted p-12 text-center">
+          <p className="text-muted-foreground">No sellers found. Try adjusting your search.</p>
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredSellers.map((seller) => (
-            <SellerCard key={seller.id} seller={seller} />
+            <SellerCard key={seller.id} seller={seller} userPincode={user?.pincode} />
           ))}
         </div>
-
-        {filteredSellers.length === 0 && (
-          <p>No sellers found.</p>
-        )}
-      </main>
-
-      <Footer />
-    </div>
+      )}
+    </main>
   );
 }

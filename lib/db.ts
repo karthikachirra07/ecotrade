@@ -1,10 +1,14 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = "your_mongodb_connection_url";
+const MONGODB_URI = process.env.MONGODB_URI!;
 
 export async function connectDB() {
-  if (mongoose.connection.readyState === 1) return;
+  if (mongoose.connection.readyState >= 1) return;
 
-  await mongoose.connect(MONGODB_URI);
-  console.log("MongoDB Connected");
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log("✅ MongoDB Connected");
+  } catch (error) {
+    console.error("❌ DB Error:", error);
+  }
 }

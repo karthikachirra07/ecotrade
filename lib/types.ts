@@ -1,5 +1,5 @@
 // User types
-export type UserRole = "seller" | "consumer";
+export type UserRole = "admin"|"seller" | "consumer";
 export type Product = {
   id: number;
   name: string;
@@ -13,6 +13,12 @@ export type Product = {
   inStock: boolean;
   rating: number;
   reviews: number;
+  certification?: string;
+  seasonal?: boolean;
+  benefits?: string[];
+  sales?: number;
+  revenue?: number;
+  icon?: string;
 };
 
 export type Seller = {
@@ -38,6 +44,7 @@ export interface User {
   practicesDescription?: string;
   // Consumer specific
   address?: string;
+  status?: "pending" | "approved" | "rejected";
 }
 
 // Product types
@@ -95,8 +102,8 @@ export interface BlockchainTransaction {
   from: string;
   to: string;
   amount: number;
-  timestamp: string;
-  productIds: string[];
+  timestamp: number;
+  productIds: number[];
   blockNumber: number;
 }
 

@@ -1,7 +1,27 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@custom-variant dark (&:is(.dark *));
+button {
+  cursor: pointer;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+/* Light mode (default) */
+body {
+  background: white;
+  color: black;
+}
+
+/* Dark mode */
+.dark body {
+  background: #111;
+  color: white;
+}
 
 /* EcoTrade Theme - Earthy Greens & Warm Cream */
 :root {
@@ -82,8 +102,39 @@
   --sidebar-border: oklch(0.3 0.02 150);
   --sidebar-ring: oklch(0.65 0.12 155);
 }
+/* Fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
-@theme inline {
+/* Slide up */
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Input focus glow */
+input:focus {
+  box-shadow: 0 0 10px #00ffcc;
+}
+
+/* Button hover */
+button:hover {
+  transform: scale(1.05);
+  background: #00e676;
+}
+:root {
   --font-sans: 'Nunito', 'Geist', 'Geist Fallback', sans-serif;
   --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
   --color-background: var(--background);
@@ -126,10 +177,13 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+      border-color: var(--border);
+    outline-color: var(--ring);
+    outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }
 
