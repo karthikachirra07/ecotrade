@@ -201,15 +201,12 @@ export const getAllProducts = () => {
   return products;
 };
 
-// Get categories (unique)
-export const getCategories = () => {
-  return [...new Set(products.map((p) => p.category))];
-};
+
 
 // Search products
 export const searchProducts = (query: string) => {
   return products.filter((p) =>
-    p.name.toLowerCase().includes(query.toLowerCase())
+    (p.name || "").toLowerCase().includes((query || "").toLowerCase())
   );
 };
 
@@ -236,6 +233,15 @@ export const getSellerById = (id: number) => {
 export const getProductByCategory = (category: string) => {
   return products.filter((p) => p.category === category);
 };
+export const categories = ["Vegetables", "Fruits", "Dairy"];
+
+export function getCategories() {
+  return categories;
+}
+
+export function getProductsByCategory(category: string) {
+  return [];
+}
 
 // Calculate distance between two pincodes (mock implementation)
 export const calculateDistance = (pincode1: string, pincode2: string): number => {

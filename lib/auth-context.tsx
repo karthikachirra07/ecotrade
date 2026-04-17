@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     const users: User[] = JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
     const foundUser = users.find(
-      (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+      (u) => (u.email || "").toLowerCase()=== (email || "").toLowerCase() && u.password === password
     );
 
     if (foundUser) {
@@ -85,7 +85,7 @@ const register = async (userData: RegisterData): Promise<{ success: boolean; err
     const users: User[] = JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
     
     // Check if email already exists
-    if (users.some((u) => u.email.toLowerCase() === userData.email.toLowerCase())) {
+    if (users.some((u) => (u?.email || "").toLowerCase()=== (userData?.email || "").toLowerCase())) {
       return { success: false, error: "Email already registered" };
     }
     const newUser: User = {

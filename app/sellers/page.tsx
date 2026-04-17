@@ -15,11 +15,11 @@ export default function SellersPage() {
     let result = filterPincode ? getSellersByPincode(filterPincode) : [...sellers];
 
     if (searchQuery) {
-      const query = searchQuery.toLowerCase();
+      const query = (searchQuery || "").toLowerCase();
       result = result.filter(
         (seller: any) =>
-          seller.name.toLowerCase().includes(query) ||
-          seller.city.toLowerCase().includes(query)
+          (seller.name || "").toLowerCase().includes(query) ||
+          (seller.city || "").toLowerCase().includes(query)
       );
     }
     return result;
