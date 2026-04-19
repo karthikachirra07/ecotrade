@@ -1,32 +1,46 @@
-import * as CryptoJS from "crypto-js";
-import type { BlockchainTransaction } from "./types";
+import crypto from "crypto"
 
-export type Transaction = BlockchainTransaction;
+type TransactionInput = {
+  from: string
+  to: string
+  amount: number
+  productIds: string[]
+}
 
-class MockBlockchain {
-  private chain: Transaction[] = [];
+type Transaction = TransactionInput & {
+  txHash: string
+  timestamp: number
+}
 
-  createTransaction(data: Omit<Transaction, "txHash" | "timestamp" | "blockNumber">) {
-    const timestamp = Date.now();
-    const raw = JSON.stringify(data) + timestamp;
+class Blockchain {
+  ledger: Transaction[] = []
 
-    const txHash = CryptoJS.SHA256(raw).toString();
+  createTransaction({
+    from,
+    to,
+    amount,
+    productIds
+  }: TransactionInput): Transaction {
+
+    const timestamp = Date.now()
+
+    const txHash = crypto
+      .createHash("sha256")
+      .update(`${from}-${to}-${amount}-${timestamp}`)
+      .digest("hex")
 
     const tx: Transaction = {
-      ...data,
       txHash,
-      timestamp,
-      blockNumber: this.chain.length + 1,
-    };
+      from,
+      to,
+      amount,
+      productIds,
+      timestamp
+    }
 
-    this.chain.push(tx);
-
-    return tx;
-  }
-
-  getTransactions() {
-    return this.chain;
+    this.ledger.push(tx)
+    return tx
   }
 }
 
-export const blockchain = new MockBlockchain();
+export const blockchain = new Blockchain()

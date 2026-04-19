@@ -26,9 +26,17 @@ export function ProductCard({ product }: any) {
         </div>
       </div>
 
-      <div className="mb-4">
-        <EcoScore score={product.ecoScore} size="sm" showLabel={true} />
-      </div>
+     
+    <div className="p-4 border rounded-xl shadow bg-white">
+      <h2 className="text-lg font-semibold">{product.name}</h2>
+
+      <p>₹{product.price}</p>
+
+      <p className="text-green-700">
+        {"🍃".repeat(product.ecoScore)}
+      </p>
+    </div>
+  
 
       <div className="mb-4 flex items-center justify-between">
         <div>

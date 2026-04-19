@@ -1,17 +1,18 @@
-import { connectDB } from "@/lib/db";
-import Product from "@/models/Product";
-import { NextResponse } from "next/server";
+export const runtime = "nodejs"
 
 export async function GET() {
-  await connectDB();
-  const products = await Product.find();
-  return NextResponse.json(products);
-}
-
-export async function POST(req: Request) {
-  await connectDB();
-  const data = await req.json();
-
-  const newProduct = await Product.create(data);
-  return NextResponse.json(newProduct);
+  return Response.json([
+    {
+      id: "1",
+      name: "Organic Tomatoes",
+      price: 40,
+      ecoScore: 5
+    },
+    {
+      id: "2",
+      name: "Fresh Milk",
+      price: 60,
+      ecoScore: 4
+    }
+  ])
 }
